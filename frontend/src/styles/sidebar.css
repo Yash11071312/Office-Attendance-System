@@ -1,0 +1,266 @@
+/* ===========================
+   Sidebar
+=========================== */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 270px;
+  height: 100vh;
+
+  background: rgba(17, 24, 39, 0.92);
+  backdrop-filter: blur(20px);
+
+  border-right: 1px solid rgba(255,255,255,.08);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 25px 18px;
+
+  transition: transform .3s ease;
+
+  z-index: 1000;
+}
+
+/* ===========================
+   Logo
+=========================== */
+
+.sidebar-logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:#fff;
+    margin-bottom:45px;
+}
+
+.sidebar-logo span{
+    font-size:30px;
+}
+
+.sidebar-logo h2{
+    font-size:22px;
+    font-weight:700;
+}
+
+/* ===========================
+   Menu
+=========================== */
+
+.sidebar-menu{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.sidebar-link{
+    display:flex;
+    align-items:center;
+    gap:15px;
+
+    text-decoration:none;
+
+    color:#d1d5db;
+
+    padding:15px 18px;
+
+    border-radius:14px;
+
+    transition:.25s;
+}
+
+.sidebar-link:hover{
+    background:rgba(99,102,241,.15);
+    color:#fff;
+    transform:translateX(6px);
+}
+
+.sidebar-link.active{
+    background:linear-gradient(135deg,#6366f1,#4f46e5);
+    color:white;
+    box-shadow:0 10px 25px rgba(99,102,241,.35);
+}
+
+.sidebar-link svg{
+    font-size:18px;
+}
+
+.sidebar-link span{
+    font-size:16px;
+    font-weight:600;
+}
+
+/* ===========================
+   Logout
+=========================== */
+
+.sidebar-logout-btn{
+
+    width:100%;
+
+    border:none;
+
+    border-radius:14px;
+
+    padding:15px;
+
+    cursor:pointer;
+
+    background:linear-gradient(135deg,#ff5f6d,#ff416c);
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    transition:.25s;
+}
+
+.sidebar-logout-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 25px rgba(255,65,108,.35);
+
+}
+/* ===========================
+   Mobile Menu Button
+=========================== */
+
+.menu-toggle{
+    display:none;
+
+    position:fixed;
+
+    top:20px;
+    left:20px;
+
+    width:48px;
+    height:48px;
+
+    border:none;
+    border-radius:12px;
+
+    background:#6366f1;
+    color:white;
+
+    font-size:20px;
+
+    cursor:pointer;
+
+    z-index:1101;
+
+    transition:.3s;
+}
+
+.menu-toggle:hover{
+    background:#4f46e5;
+}
+
+.menu-toggle.active{
+    left:225px;
+}
+
+/* ===========================
+   Overlay
+=========================== */
+
+.sidebar-overlay{
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    backdrop-filter:blur(2px);
+
+    z-index:999;
+}
+
+/* ===========================
+   Tablet
+=========================== */
+
+@media (max-width:768px){
+
+    .menu-toggle{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    }
+
+    .sidebar{
+        transform:translateX(-100%);
+        width:270px;
+    }
+
+    .sidebar.show{
+        transform:translateX(0);
+    }
+
+}
+
+/* ===========================
+   Mobile
+=========================== */
+
+@media (max-width:480px){
+
+    .sidebar{
+        width:250px;
+        padding:22px 16px;
+    }
+
+    .menu-toggle.active{
+        left:205px;
+    }
+
+    .sidebar-logo{
+        margin-bottom:35px;
+    }
+
+    .sidebar-logo h2{
+        font-size:19px;
+    }
+
+    .sidebar-link{
+        padding:14px;
+    }
+
+    .sidebar-link span{
+        font-size:15px;
+    }
+
+   .sidebar-logout-btn{
+        padding:14px;
+    }
+
+}
+
+/* ===========================
+   Very Small Phones
+=========================== */
+
+@media (max-width:360px){
+
+    .sidebar{
+        width:220px;
+    }
+
+    .menu-toggle.active{
+        left:175px;
+    }
+
+}

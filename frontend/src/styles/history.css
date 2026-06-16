@@ -1,0 +1,71 @@
+.history-page{
+
+padding:40px;
+
+color:white;
+
+}
+
+.history-page h1{
+
+margin-bottom:25px;
+
+font-size:32px;
+
+}
+
+.history-page table{
+
+width:100%;
+
+border-collapse:collapse;
+
+background:#1e293b;
+
+border-radius:15px;
+
+overflow:hidden;
+
+}
+
+.history-page th{
+
+background:#334155;
+
+padding:18px;
+
+text-align:left;
+
+}
+
+.history-page td{
+
+padding:18px;
+
+border-top:1px solid rgba(255,255,255,.08);
+
+}
+
+.history-page tr:hover{
+
+background:#293548;
+
+}
+
+@media(max-width:768px){
+
+.history-page{
+
+padding:20px;
+
+overflow-x:auto;
+
+}
+
+table{
+
+min-width:700px;
+
+}
+
+}
