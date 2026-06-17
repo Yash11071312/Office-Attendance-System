@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import api from "../../services/api";
 import "../../styles/admin.css";
 import AppLayout from "../../components/AppLayout";
+import toast from "react-hot-toast";
+
 
 function Employees() {
+  const [deleteId, setDeleteId] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [showModal, setShowModal] = useState(false);
 const [search, setSearch] = useState("");
@@ -50,11 +53,11 @@ const [editingId, setEditingId] = useState(null);
         role: formData.role,
       });
 
-      alert("Employee Updated");
+    toast.success("Employee Updated");
     } else {
       await api.post("/admin/employee", formData);
 
-      alert("Employee Added");
+      toast.success("Employee Added Successfully");
     }
 
     setEditingId(null);
@@ -73,27 +76,26 @@ const [editingId, setEditingId] = useState(null);
 
     loadEmployees();
   } catch (err) {
-    alert(err.response?.data?.message || "Something went wrong");
+ toast.error(
+  err.response?.data?.message ||
+  "Something went wrong"
+);
   }
 };
 
-  const deleteEmployee = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this employee?"
-    );
+ const deleteEmployee = async () => {
+  try {
+    await api.delete(`/admin/employee/${deleteId}`);
 
-    if (!confirmDelete) return;
+    toast.success("Employee Deleted Successfully");
 
-    try {
-      await api.delete(`/admin/employee/${id}`);
+    setDeleteId(null);
 
-      alert("Employee Deleted");
-
-      loadEmployees();
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    loadEmployees();
+  } catch (err) {
+    toast.error("Unable to delete employee.");
+  }
+};
 const editEmployee = (emp) => {
   setEditingId(emp._id);
 
@@ -168,7 +170,7 @@ const editEmployee = (emp) => {
 
   <button
     className="delete-btn"
-    onClick={() => deleteEmployee(emp._id)}
+  onClick={() => setDeleteId(emp._id)}
   >
     Delete
   </button>
@@ -262,6 +264,7 @@ const editEmployee = (emp) => {
     designation: "",
     role: "employee",
   });
+  
 }}
               >
                 Cancel
@@ -271,6 +274,33 @@ const editEmployee = (emp) => {
         </div>
       )}
     </div>
+    {deleteId && (
+  <div className="modal">
+    <div className="modal-box">
+      <h2>Delete Employee?</h2>
+
+      <p style={{ margin: "15px 0", color: "#94a3b8" }}>
+        This action cannot be undone.
+      </p>
+
+      <div className="modal-buttons">
+        <button
+          className="delete-btn"
+          onClick={deleteEmployee}
+        >
+          Delete
+        </button>
+
+        <button
+          className="add-btn"
+          onClick={() => setDeleteId(null)}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </AppLayout>
   );
 }

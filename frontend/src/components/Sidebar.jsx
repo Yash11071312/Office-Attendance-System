@@ -8,18 +8,11 @@ import {
   FaSignOutAlt,
   FaBars,
 } from "react-icons/fa";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./../styles/sidebar.css";
 
-function Sidebar() {
-  const navigate = useNavigate();
+function Sidebar({ onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("employee");
-    navigate("/login");
-  };
 
   const closeSidebar = () => setMenuOpen(false);
 
@@ -37,14 +30,14 @@ function Sidebar() {
         className={`menu-toggle ${menuOpen ? "active" : ""}`}
         onClick={() => setMenuOpen(!menuOpen)}
       >
-      {menuOpen ? "✕" : <FaBars />}
+        {menuOpen ? "✕" : <FaBars />}
       </button>
 
       {menuOpen && (
         <div
           className="sidebar-overlay"
           onClick={closeSidebar}
-        ></div>
+        />
       )}
 
       <aside className={`sidebar ${menuOpen ? "show" : ""}`}>
@@ -72,7 +65,10 @@ function Sidebar() {
           </nav>
         </div>
 
-  <button className="sidebar-logout-btn" onClick={handleLogout}>
+        <button
+          className="sidebar-logout-btn"
+          onClick={onLogout}
+        >
           <FaSignOutAlt />
           <span>Logout</span>
         </button>

@@ -69,3 +69,61 @@ min-width:700px;
 }
 
 }
+.empty-state{
+    padding:70px 20px;
+    text-align:center;
+    color:white;
+}
+
+.empty-icon{
+    font-size:70px;
+    margin-bottom:15px;
+}
+
+.empty-state h2{
+    margin-bottom:12px;
+    font-size:28px;
+}
+
+.empty-state p{
+    color:#94a3b8;
+    font-size:16px;
+}
+
+@media (max-width:768px){
+
+.empty-state{
+padding:40px 15px;
+}
+
+.empty-icon{
+font-size:55px;
+}
+
+.empty-state h2{
+font-size:22px;
+}
+
+}
+.status-badge{
+display:inline-block;
+padding:8px 18px;
+border-radius:999px;
+font-weight:600;
+font-size:14px;
+color:white;
+text-align:center;
+min-width:90px;
+}
+
+.status-badge.present{
+background:#22c55e;
+}
+
+.status-badge.absent{
+background:#ef4444;
+}
+
+.status-badge.late{
+background:#f59e0b;
+}

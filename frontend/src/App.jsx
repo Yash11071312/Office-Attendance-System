@@ -7,11 +7,15 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Employees from "./pages/admin/Employees";
 import Attendance from "./pages/admin/Attendance";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
     
     <Routes>
+      
       <Route path="/admin/attendance" element={<Attendance />} />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/admin/employees" element={<Employees />} />
@@ -37,7 +41,20 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route path="/profile" element={<Profile />} />
+<Route
+  path="/attendance"
+  element={
+    <ProtectedRoute>
+      <Attendance />
+    </ProtectedRoute>
+  }
+/>
+<Route path="/settings" element={<Settings />} />
+    <Route path="*" element={<NotFound />} />
     </Routes>
+    
+    
   );
 }
 

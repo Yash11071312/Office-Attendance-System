@@ -13,6 +13,7 @@ import StatCard from "../components/StatCard";
 import AttendanceTable from "../components/AttendanceTable";
 
 import "../styles/dashboard.css";
+import toast from "react-hot-toast";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ function Dashboard() {
 
   const [today, setToday] = useState(null);
   const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!employee) {
@@ -43,29 +45,44 @@ function Dashboard() {
   };
 
   const handleCheckIn = async () => {
-    try {
-      await api.post("/attendance/checkin", {
-        location: {},
-      });
+  setLoading(true);
 
-      await loadDashboard();
-      alert("Checked In Successfully");
-    } catch (err) {
-      alert(err.response?.data?.message || "Check In Failed");
-    }
-  };
+  try {
+    await api.post("/attendance/checkin", {
+      location: {},
+    });
 
-  const handleCheckOut = async () => {
-    try {
-      await api.post("/attendance/checkout");
+    loadDashboard();
 
-      await loadDashboard();
-      alert("Checked Out Successfully");
-    } catch (err) {
-      alert(err.response?.data?.message || "Check Out Failed");
-    }
-  };
+    toast.success("Checked In Successfully");
+  } catch (err) {
+    toast.error(
+      err.response?.data?.message ||
+      "Unable to Check In"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
+ const handleCheckOut = async () => {
+  setLoading(true);
+
+  try {
+    await api.post("/attendance/checkout");
+
+    loadDashboard();
+
+    toast.success("Checked Out Successfully");
+  } catch (err) {
+    toast.error(
+      err.response?.data?.message ||
+      "Unable to Check Out"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <AppLayout>
       <div className="cards">
@@ -102,21 +119,21 @@ function Dashboard() {
       </div>
 
       <div className="button-row">
-        <button
-          className="checkin"
-          onClick={handleCheckIn}
-          disabled={!!today}
-        >
-          Check In
-        </button>
+       <button
+  className="checkin"
+  onClick={handleCheckIn}
+  disabled={loading || today}
+>
+  {loading ? "Checking In..." : "Check In"}
+</button>
 
-        <button
-          className="checkout"
-          onClick={handleCheckOut}
-          disabled={!today || !!today.checkOut}
-        >
-          Check Out
-        </button>
+   <button
+  className="checkout"
+  onClick={handleCheckOut}
+  disabled={loading || !today || today.checkOut}
+>
+  {loading ? "Checking Out..." : "Check Out"}
+</button>
       </div>
 
       <AttendanceTable attendance={history} />

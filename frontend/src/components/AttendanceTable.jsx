@@ -56,15 +56,19 @@ function AttendanceTable({ attendance }) {
 
               <td>{item.totalHours}</td>
 
-              <td
-                className={
-                  item.status === "Present"
-                    ? "present"
-                    : "absent"
-                }
-              >
-                {item.status}
-              </td>
+      <td>
+  <span
+    className={`status-badge ${
+      item.status === "Present"
+        ? "present"
+        : item.status === "Late"
+        ? "late"
+        : "absent"
+    }`}
+  >
+    {item.status}
+  </span>
+</td>
 
             </tr>
 

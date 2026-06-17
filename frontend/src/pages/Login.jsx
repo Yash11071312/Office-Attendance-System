@@ -9,21 +9,29 @@ import {
 import toast from "react-hot-toast";
 
 import api from "../services/api";
-
-
 import "../styles/login.css";
+import Loader from "../components/Loader";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    setError("");
+
+    if (!email.trim() || !password.trim()) {
+      const message = "Please enter both email and password.";
+      setError(message);
+      toast.error(message);
+      return;
+    }
 
     setLoading(true);
 
@@ -32,35 +40,38 @@ function Login() {
         email,
         password,
       });
-localStorage.setItem("token", res.data.token);
 
-localStorage.setItem(
-  "employee",
-  JSON.stringify(res.data.employee)
-);
-
-toast.success("Login Successful!");
-
-if (res.data.employee.role === "admin") {
-  navigate("/admin");
-} else {
-  navigate("/dashboard");
-}
-    } catch (err) {
-      toast.error(
-        err.response?.data?.message || "Login Failed"
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem(
+        "employee",
+        JSON.stringify(res.data.employee)
       );
-    }
 
-    setLoading(false);
+      toast.success("Login Successful!");
+
+      if (res.data.employee.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      const message =
+        err.response?.data?.message ||
+        "Invalid email or password.";
+
+      setError(message);
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="login-container">
-
       <form className="login-box" onSubmit={handleLogin}>
-
         <h1>Office Attendance</h1>
+
+        {/* Email */}
 
         <div className="input-group">
           <FaEnvelope className="icon" />
@@ -69,42 +80,53 @@ if (res.data.employee.role === "admin") {
             type="email"
             placeholder="Email Address"
             value={email}
-            onChange={(e)=>setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError("");
+            }}
           />
         </div>
 
+        {/* Password */}
+
         <div className="input-group">
-          <FaLock className="icon"/>
+          <FaLock className="icon" />
 
           <input
-            type={showPassword ? "text":"password"}
+            type={showPassword ? "text" : "password"}
             placeholder="Password"
             value={password}
-            onChange={(e)=>setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError("");
+            }}
           />
 
           <span
             className="eye"
-            onClick={()=>setShowPassword(!showPassword)}
+            onClick={() => setShowPassword(!showPassword)}
           >
-            {showPassword ? <FaEyeSlash/> : <FaEye/>}
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
           </span>
-
         </div>
 
-        <button disabled={loading}>
+        {/* Error Message */}
 
+        {error && (
+          <p className="login-error">{error}</p>
+        )}
+
+        <button disabled={loading}>
           {loading ? (
             <div className="loader"></div>
           ) : (
             "Login"
           )}
-
         </button>
-
       </form>
-
+     
     </div>
+    
   );
 }
 

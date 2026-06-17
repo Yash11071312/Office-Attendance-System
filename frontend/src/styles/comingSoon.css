@@ -1,0 +1,48 @@
+.coming-page{
+    min-height:80vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.coming-card{
+    max-width:450px;
+    width:100%;
+    background:#1e293b;
+    border-radius:20px;
+    padding:40px 30px;
+    text-align:center;
+    color:white;
+    box-shadow:0 15px 35px rgba(0,0,0,.3);
+}
+
+.coming-icon{
+    font-size:70px;
+    margin-bottom:20px;
+}
+
+.coming-card h1{
+    margin-bottom:15px;
+}
+
+.coming-card p{
+    color:#94a3b8;
+    margin:10px 0;
+}
+
+.back-btn{
+    margin-top:30px;
+    padding:14px 25px;
+    border:none;
+    border-radius:12px;
+    background:#6366f1;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+    transition:.3s;
+}
+
+.back-btn:hover{
+    transform:translateY(-3px);
+}
