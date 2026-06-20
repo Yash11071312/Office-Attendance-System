@@ -93,12 +93,15 @@ console.log("Searching for:", email);
       success: true,
       message: "Login Successful",
       token,
-      employee: {
-        id: employee._id,
-        fullName: employee.fullName,
-        email: employee.email,
-        role: employee.role,
-      },
+    employee: {
+  id: employee._id,
+  fullName: employee.fullName,
+  employeeId: employee.employeeId,
+  email: employee.email,
+  department: employee.department,
+  designation: employee.designation,
+  role: employee.role,
+},
     });
   } catch (err) {
     console.log(err);

@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
+const Employee = require("../models/Employee");
 
-const protect = (req, res, next) => {
+const protect = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
         success: false,
         message: "No Token Provided",
@@ -15,10 +16,18 @@ const protect = (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.employee = decoded;
+    const employee = await Employee.findById(decoded.id).select("-password");
+
+    if (!employee) {
+      return res.status(404).json({
+        success: false,
+        message: "Employee not found",
+      });
+    }
+
+    req.employee = employee;
 
     next();
-
   } catch (error) {
     return res.status(401).json({
       success: false,
