@@ -2,6 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://office-attendance-system-zp4v.onrender.com/api",
+  // baseURL:"http://localhost:5000/api"
 });
 
 api.interceptors.request.use((config) => {
@@ -11,7 +12,7 @@ api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
-  console.log("REQUEST URL:", config.baseURL + config.url);
+
 
   return config;
 });
