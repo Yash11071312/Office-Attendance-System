@@ -10,7 +10,7 @@ import Attendance from "./pages/admin/Attendance";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-
+import Reports from "./pages/admin/Reports";
 function App() {
   return (
     
@@ -19,7 +19,10 @@ function App() {
       <Route path="/admin/attendance" element={<Attendance />} />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/admin/employees" element={<Employees />} />
-      
+      <Route
+  path="/admin/reports"
+  element={<Reports />}
+/>
       <Route path="/" element={<Login />} />
 
       <Route path="/login" element={<Login />} />

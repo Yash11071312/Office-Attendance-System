@@ -14,6 +14,8 @@ import AttendanceTable from "../components/AttendanceTable";
 
 import "../styles/dashboard.css";
 import toast from "react-hot-toast";
+import AttendanceChart from "../components/AttendanceChart";
+import "../styles/chart.css";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -137,6 +139,7 @@ function Dashboard() {
       </div>
 
       <AttendanceTable attendance={history} />
+      <AttendanceChart attendance={history} />
     </AppLayout>
   );
 }

@@ -10,20 +10,30 @@ import {
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import "./../styles/sidebar.css";
+import { FaFileExport } from "react-icons/fa";
+const employee = JSON.parse(localStorage.getItem("employee"));
 
 function Sidebar({ onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeSidebar = () => setMenuOpen(false);
 
-  const navItems = [
-    { to: "/dashboard", icon: <FaHome />, label: "Dashboard" },
-    { to: "/attendance", icon: <FaClipboardList />, label: "Attendance" },
-    { to: "/history", icon: <FaHistory />, label: "History" },
-    { to: "/profile", icon: <FaUser />, label: "Profile" },
-    { to: "/settings", icon: <FaCog />, label: "Settings" },
-  ];
-
+const navItems =
+  employee?.role === "admin"
+    ? [
+        { to: "/admin", icon: <FaHome />, label: "Dashboard" },
+        { to: "/admin/employees", icon: <FaUser />, label: "Employees" },
+        { to: "/admin/attendance", icon: <FaClipboardList />, label: "Attendance" },
+        { to: "/admin/reports", icon: <FaFileExport />, label: "Reports" },
+        { to: "/settings", icon: <FaCog />, label: "Settings" },
+      ]
+    : [
+        { to: "/dashboard", icon: <FaHome />, label: "Dashboard" },
+        { to: "/attendance", icon: <FaClipboardList />, label: "Attendance" },
+        { to: "/history", icon: <FaHistory />, label: "History" },
+        { to: "/profile", icon: <FaUser />, label: "Profile" },
+        { to: "/settings", icon: <FaCog />, label: "Settings" },
+      ];
   return (
     <>
       <button
