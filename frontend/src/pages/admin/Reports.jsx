@@ -70,7 +70,23 @@ function Reports() {
   // ==========================
   // UPDATE SUMMARY + FILE NAME
   // ==========================
+const loadSummary = async () => {
+  try {
+    const res = await api.get("/admin/report/summary", {
+      params: {
+        employee,
+        department,
+        status,
+        from,
+        to,
+      },
+    });
 
+    setSummary(res.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
   useEffect(() => {
     updateSummary();
   }, [employee, department, status, from, to, employees]);
