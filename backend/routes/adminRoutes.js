@@ -8,7 +8,6 @@ const {
   addEmployee,
   updateEmployee,
 } = require("../controllers/adminController");
-
 router.get("/dashboard", getDashboard);
 router.get("/employees", getEmployees);
 router.delete("/employee/:id", deleteEmployee);

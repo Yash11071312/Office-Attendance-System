@@ -18,7 +18,39 @@ const downloadExcel = async (req, res) => {
       { header: "Status", key: "status", width: 12 },
     ];
 
-    const attendance = await Attendance.find().populate("employee");
+const { employee, department, from, to, status } = req.query;
+
+let attendance = await Attendance.find().populate("employee");
+
+if (employee && employee !== "all") {
+  attendance = attendance.filter(
+    (item) => item.employee?._id.toString() === employee
+  );
+}
+
+if (department && department !== "all") {
+  attendance = attendance.filter(
+    (item) => item.employee?.department === department
+  );
+}
+
+if (status && status !== "all") {
+  attendance = attendance.filter(
+    (item) => item.status === status
+  );
+}
+
+if (from) {
+  attendance = attendance.filter(
+    (item) => new Date(item.date) >= new Date(from)
+  );
+}
+
+if (to) {
+  attendance = attendance.filter(
+    (item) => new Date(item.date) <= new Date(to)
+  );
+}
 
     attendance.forEach((item) => {
       sheet.addRow({
@@ -42,10 +74,15 @@ const downloadExcel = async (req, res) => {
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
 
-    res.setHeader(
-      "Content-Disposition",
-      'attachment; filename="Attendance_Report.xlsx"'
-    );
+  const filename =
+  employee && employee !== "all"
+    ? `Attendance_${attendance[0]?.employee?.fullName || "Employee"}_${from || "All"}_to_${to || "Today"}.xlsx`
+    : `Attendance_All_Employees_${from || "All"}_to_${to || "Today"}.xlsx`;
+
+res.setHeader(
+  "Content-Disposition",
+  `attachment; filename="${filename}"`
+);
 
     await workbook.xlsx.write(res);
 
@@ -63,7 +100,39 @@ const downloadExcel = async (req, res) => {
 
 const downloadPDF = async (req, res) => {
   try {
-    const attendance = await Attendance.find().populate("employee");
+const { employee, department, from, to, status } = req.query;
+
+let attendance = await Attendance.find().populate("employee");
+
+if (employee && employee !== "all") {
+  attendance = attendance.filter(
+    (item) => item.employee?._id.toString() === employee
+  );
+}
+
+if (department && department !== "all") {
+  attendance = attendance.filter(
+    (item) => item.employee?.department === department
+  );
+}
+
+if (status && status !== "all") {
+  attendance = attendance.filter(
+    (item) => item.status === status
+  );
+}
+
+if (from) {
+  attendance = attendance.filter(
+    (item) => new Date(item.date) >= new Date(from)
+  );
+}
+
+if (to) {
+  attendance = attendance.filter(
+    (item) => new Date(item.date) <= new Date(to)
+  );
+}
 
     const doc = new PDFDocument({
       margin: 40,
@@ -72,11 +141,15 @@ const downloadPDF = async (req, res) => {
 
     res.setHeader("Content-Type", "application/pdf");
 
-    res.setHeader(
-      "Content-Disposition",
-      'attachment; filename="Attendance_Report.pdf"'
-    );
+   const filename =
+  employee && employee !== "all"
+    ? `Attendance_${attendance[0]?.employee?.fullName || "Employee"}_${from || "All"}_to_${to || "Today"}.xlsx`
+    : `Attendance_All_Employees_${from || "All"}_to_${to || "Today"}.xlsx`;
 
+res.setHeader(
+  "Content-Disposition",
+  `attachment; filename="${filename}"`
+);
     doc.pipe(res);
 
     doc
@@ -144,6 +217,41 @@ const downloadPDF = async (req, res) => {
   } catch (err) {
     console.log(err);
 
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+const getReportSummary = async (req, res) => {
+  try {
+    const attendance = await Attendance.find().populate("employee");
+
+    const employees = new Set(
+      attendance.map(a => a.employee?._id.toString())
+    ).size;
+
+    const present = attendance.filter(a => a.status === "Present").length;
+    const late = attendance.filter(a => a.status === "Late").length;
+    const absent = attendance.filter(a => a.status === "Absent").length;
+
+    const hours = attendance.reduce(
+      (sum, a) => sum + (a.totalHours || 0),
+      0
+    );
+
+    const pages = Math.max(1, Math.ceil(attendance.length / 25));
+
+    res.json({
+      employees,
+      present,
+      late,
+      absent,
+      hours,
+      pages,
+    });
+
+  } catch (err) {
     res.status(500).json({
       success: false,
       message: err.message,

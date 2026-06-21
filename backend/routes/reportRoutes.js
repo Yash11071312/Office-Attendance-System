@@ -9,5 +9,5 @@ const {
 
 router.get("/pdf", protect, downloadPDF);
 router.get("/excel", protect, downloadExcel);
-
+router.get("/summary", protect, getReportSummary);
 module.exports = router;
