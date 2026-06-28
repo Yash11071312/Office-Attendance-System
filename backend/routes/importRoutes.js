@@ -1,8 +1,15 @@
 const express = require("express");
-const router = express.Router();
 const multer = require("multer");
 
-const upload = multer({ dest: "uploads/" });
+const router = express.Router();
+
+const upload = multer({
+  dest: "uploads/",
+});
+
+const {
+  importEmployees,
+} = require("../controllers/importController");
 
 router.post(
   "/employees",
