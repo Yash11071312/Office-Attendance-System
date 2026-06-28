@@ -4,7 +4,7 @@ import "../../styles/admin.css";
 import AppLayout from "../../components/AppLayout";
 import toast from "react-hot-toast";
 
-
+import { FaFileImport } from "react-icons/fa";
 function Employees() {
   const [deleteId, setDeleteId] = useState(null);
   const [employees, setEmployees] = useState([]);
@@ -96,6 +96,25 @@ const [editingId, setEditingId] = useState(null);
     toast.error("Unable to delete employee.");
   }
 };
+const handleImport = async (e) => {
+  const file = e.target.files[0];
+
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    await api.post("/import/employees", formData);
+
+    toast.success("Employees Imported Successfully");
+
+    loadEmployees();
+  } catch (err) {
+    console.log(err);
+    toast.error("Import Failed");
+  }
+};
 const editEmployee = (emp) => {
   setEditingId(emp._id);
 
@@ -114,16 +133,38 @@ const editEmployee = (emp) => {
   return (
     <AppLayout>
     <div className="admin-page">
-      <div className="page-header">
-        <h1>Employees</h1>
+    <div className="page-header">
+  <h1>Employees</h1>
 
-        <button
-          className="add-btn"
-          onClick={() => setShowModal(true)}
-        >
-          + Add Employee
-        </button>
-      </div>
+  <div style={{ display: "flex", gap: "10px" }}>
+
+    <button
+      className="add-btn"
+      onClick={() => setShowModal(true)}
+    >
+      + Add Employee
+    </button>
+
+    <button
+      className="add-btn"
+      onClick={() =>
+        document.getElementById("excelUpload").click()
+      }
+    >
+      <FaFileImport />
+      &nbsp; Import Excel
+    </button>
+
+  </div>
+
+  <input
+    id="excelUpload"
+    type="file"
+    accept=".xlsx,.xls"
+    hidden
+    onChange={handleImport}
+  />
+</div>
 <input
   className="search-box"
   type="text"

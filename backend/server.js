@@ -1,9 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-
+const helmet = require("helmet");
 const connectDB = require("./config/db");
-
+const mongoSanitize = require("express-mongo-sanitize");
 const employeeRoutes = require("./routes/employeeRoutes");
 const attendanceRoutes = require("./routes/attendanceRoutes");
 const reportRoutes = require("./routes/reportRoutes");
@@ -17,8 +17,9 @@ connectDB();
 const app = express();
 
 app.use(cors());
+app.use(helmet());
 app.use(express.json());
-
+app.use(mongoSanitize());
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
