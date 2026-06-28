@@ -135,7 +135,26 @@ const editEmployee = (emp) => {
     <div className="admin-page">
     <div className="page-header">
   <h1>Employees</h1>
+<div className="employee-stats">
+  <div className="stat-card">
+    <h2>{employees.length}</h2>
+    <p>Total Employees</p>
+  </div>
 
+  <div className="stat-card">
+    <h2>
+      {employees.filter(e => e.role === "admin").length}
+    </h2>
+    <p>Admins</p>
+  </div>
+
+  <div className="stat-card">
+    <h2>
+      {new Set(employees.map(e => e.department)).size}
+    </h2>
+    <p>Departments</p>
+  </div>
+</div>
   <div style={{ display: "flex", gap: "10px" }}>
 
     <button

@@ -52,15 +52,14 @@ const registerEmployee = async (req, res) => {
 // Login Employee
 const loginEmployee = async (req, res) => {
   try {
-    console.log("Login route reached");
+
 
     const { email, password } = req.body;
-console.log("Searching for:", email);
+
 
    
     const employee = await Employee.findOne({ email });
-    console.log(await Employee.find());
-    console.log("Found employee:", employee);
+
 
     if (!employee) {
       return res.status(404).json({
