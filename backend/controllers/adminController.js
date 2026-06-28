@@ -1,6 +1,6 @@
 const Employee = require("../models/Employee");
 const Attendance = require("../models/Attendance");
-
+const XLSX = require("xlsx");
 const getDashboard = async (req, res) => {
   try {
     const totalEmployees = await Employee.countDocuments();
@@ -153,11 +153,45 @@ const updateEmployee = async (req, res) => {
       message: err.message,
     });
   }
-  console.log("ID:", req.params.id);
+ 
+};
+const exportEmployees = async (req, res) => {
+  try {
+    const employees = await Employee.find()
+      .select("-password");
 
-const employee = await Employee.findById(req.params.id);
+    const workbook = XLSX.utils.book_new();
 
-console.log(employee);
+    const worksheet =
+      XLSX.utils.json_to_sheet(employees);
+
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      "Employees"
+    );
+
+    const buffer = XLSX.write(workbook, {
+      type: "buffer",
+      bookType: "xlsx",
+    });
+
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=employees.xlsx"
+    );
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+
+    res.send(buffer);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
 };
 module.exports = {
   getDashboard,
@@ -165,4 +199,5 @@ module.exports = {
   deleteEmployee,
   addEmployee,
   updateEmployee,
+  exportEmployees,
 };

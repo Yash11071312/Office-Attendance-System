@@ -96,6 +96,36 @@ const [editingId, setEditingId] = useState(null);
     toast.error("Unable to delete employee.");
   }
 };
+const downloadEmployees = async () => {
+  try {
+    const res = await api.get(
+      "/admin/employees/export",
+      {
+        responseType: "blob",
+      }
+    );
+
+    const url = window.URL.createObjectURL(
+      new Blob([res.data])
+    );
+
+    const link =
+      document.createElement("a");
+
+    link.href = url;
+    link.download = "Employees.xlsx";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    toast.success("Employees Exported");
+  } catch (err) {
+    toast.error("Export failed");
+  }
+};
 const handleImport = async (e) => {
   const file = e.target.files[0];
 
@@ -134,63 +164,80 @@ const editEmployee = (emp) => {
     <AppLayout>
     <div className="admin-page">
     <div className="page-header">
-  <h1>Employees</h1>
-<div className="employee-stats">
-  <div className="stat-card">
-    <h2>{employees.length}</h2>
-    <p>Total Employees</p>
-  </div>
+ <div className="employee-top">
 
-  <div className="stat-card">
-    <h2>
-      {employees.filter(e => e.role === "admin").length}
-    </h2>
-    <p>Admins</p>
-  </div>
+<h1 className="employee-title">
+  Employees
+</h1>
 
-  <div className="stat-card">
-    <h2>
-      {new Set(employees.map(e => e.department)).size}
-    </h2>
-    <p>Departments</p>
-  </div>
-</div>
-  <div style={{ display: "flex", gap: "10px" }}>
+<div className="employee-actions">
+      <button
+        className="add-btn"
+        onClick={() => setShowModal(true)}
+      >
+        + Add Employee
+      </button>
 
-    <button
-      className="add-btn"
-      onClick={() => setShowModal(true)}
-    >
-      + Add Employee
-    </button>
+      <button
+        className="add-btn"
+        onClick={downloadEmployees}
+      >
+        Export Excel
+      </button>
 
-    <button
-      className="add-btn"
-      onClick={() =>
-        document.getElementById("excelUpload").click()
-      }
-    >
-      <FaFileImport />
-      &nbsp; Import Excel
-    </button>
+      <button
+        className="add-btn"
+        onClick={() =>
+          document.getElementById("excelUpload").click()
+        }
+      >
+        <FaFileImport />
+        &nbsp; Import Excel
+      </button>
+    </div>
 
+
+  <div className="employee-stats">
+    <div className="stat-card">
+      <h2>{employees.length}</h2>
+      <p>Total Employees</p>
+    </div>
+
+    <div className="stat-card">
+      <h2>
+        {employees.filter(
+          e => e.role === "admin"
+        ).length}
+      </h2>
+      <p>Admins</p>
+    </div>
+
+    <div className="stat-card">
+      <h2>
+        {new Set(
+          employees.map(
+            e => e.department
+          )
+        ).size}
+      </h2>
+      <p>Departments</p>
+    </div>
   </div>
 
   <input
-    id="excelUpload"
-    type="file"
-    accept=".xlsx,.xls"
-    hidden
-    onChange={handleImport}
+    className="search-box"
+    type="text"
+    placeholder="🔍 Search Employee..."
+    value={search}
+    onChange={(e) =>
+      setSearch(e.target.value)
+    }
   />
+
 </div>
-<input
-  className="search-box"
-  type="text"
-  placeholder="🔍 Search Employee..."
-  value={search}
-  onChange={(e) => setSearch(e.target.value)}
-/>
+</div>
+
+
 <div className="table-container">
       <table className="employee-table">
         <thead>

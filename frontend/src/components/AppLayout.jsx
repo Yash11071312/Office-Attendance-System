@@ -29,7 +29,9 @@ function AppLayout({ children }) {
       {showLogout && (
         <div className="modal">
           <div className="modal-box">
-            <h2>Logout?</h2>
+      <h2 style={{ color: "#fff" }}>
+    Logout?
+</h2>
 
             <p style={{ margin: "15px 0", color: "#94a3b8" }}>
               Are you sure you want to logout?
